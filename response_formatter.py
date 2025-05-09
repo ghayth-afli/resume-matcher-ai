@@ -20,16 +20,6 @@ class ResponseFormatter:
             Formatted response in the required template
         """
         try:
-            # Ensure job_info has all required fields
-            
-            # Ensure company_info has all required fields
-            
-            # Format job_description from job_info
-
-            
-            # Format contact_info
-
-            
             # Create formatted response - ensuring it follows the exact required template structure
             formatted_response = {
                 "match_result": match_result

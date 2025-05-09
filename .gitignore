@@ -1,0 +1,18 @@
+# Environment variables
+.env
+
+# Python bytecode cache
+__pycache__/
+*.py[cod]
+
+# Pytest cache
+.pytest_cache/
+
+# IDE settings
+.idea/
+
+# Qodo tool folder
+.qodo/
+
+# Virtual environment
+venv/

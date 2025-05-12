@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap");
+@import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+:root {
+  --black-pearl: #030a23;
+  --white: #ffffff;
+  --blaze-orange: #fd5b00;
+  --cornflower-blue: #6195ed;
+  --endeavour: #004f99;
+  --green: #00b300;
+  --green-2: #014601;
+  --red: #ff0000;
+  --red-2: #b30000;
+  --blue-zodiac: #0e274e;
+  --silver: #cacaca;
+  --dove-gray: #666666;
+  --dove-gray-alpha: #66666633;
+  --gun-powder: #43475a;
+  --base-font-size: 1rem;
+  --mobile-base: 0.8889rem;
+  --base-line-height: 1.5;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Kode Mono", monospace;
+}
+
+body {
+  background-color: #f9fbfd;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.mat-mdc-card {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.mat-mdc-raised-button.mat-primary {
+  background-color: var(--endeavour) !important;
+}
+
+.mat-mdc-raised-button.mat-accent {
+  background-color: var(--blaze-orange) !important;
+}

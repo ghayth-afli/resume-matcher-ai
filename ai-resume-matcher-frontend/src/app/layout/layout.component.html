@@ -1,0 +1,43 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav 
+               [mode]="(isHandset$ | async) ? 'over' : 'side'"
+               [opened]="!((isHandset$ | async) === true)" 
+               class="sidenav"
+               (keydown.escape)="sidenav.close()"
+               disableClose>
+    <mat-toolbar color="primary" class="sidenav-toolbar">
+      <span>Navigation</span>
+    </mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/match" routerLinkActive="active-link" (click)="closeSidenavOnNavigate()">
+        <mat-icon matListItemIcon>find_in_page</mat-icon>
+        <span matListItemTitle>Resume Matcher</span>
+      </a>
+      <a mat-list-item routerLink="/parse-resume" routerLinkActive="active-link" (click)="closeSidenavOnNavigate()">
+        <mat-icon matListItemIcon>text_snippet</mat-icon>
+        <span matListItemTitle>Parse Resume</span>
+      </a>
+      <a mat-list-item routerLink="/evaluate-role" routerLinkActive="active-link" (click)="closeSidenavOnNavigate()">
+        <mat-icon matListItemIcon>rate_review</mat-icon>
+        <span matListItemTitle>Evaluate Role</span>
+      </a>
+      <a mat-list-item routerLink="/health-check" routerLinkActive="active-link" (click)="closeSidenavOnNavigate()">
+        <mat-icon matListItemIcon>monitor_heart</mat-icon>
+        <span matListItemTitle>Health Check</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="header">
+      <button mat-icon-button (click)="toggleSidenav()" aria-label="Toggle sidenav">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>AI Resume Matcher</span>
+    </mat-toolbar>
+
+    <main class="content">
+      <router-outlet></router-outlet> <!-- Router outlet for routed components -->
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

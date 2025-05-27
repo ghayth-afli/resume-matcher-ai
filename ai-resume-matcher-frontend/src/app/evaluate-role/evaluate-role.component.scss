@@ -1,0 +1,223 @@
+@use '@angular/material' as mat;
+@use '../../custom-theme' as custom-theme;
+
+.evaluate-role-container {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+
+  h1 {
+    text-align: center;
+    // Use primary color for this tool's title for differentiation
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 500); 
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .sub-heading {
+    text-align: center;
+    color: mat.get-color-from-palette(mat.$grey-palette, 700);
+    margin-bottom: 24px;
+    font-size: 1.1em;
+  }
+}
+
+.evaluate-form {
+  mat-card {
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    .mat-mdc-card-header .mat-mdc-card-title {
+        font-size: 1.15em;
+        font-weight: 500;
+    }
+  }
+  mat-card-header {
+    padding-bottom: 16px;
+  }
+  mat-card-content {
+    padding-top: 16px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-array-container {
+  margin-top: 20px;
+  padding-top: 20px; // Consistent padding
+  border-top: 1px solid mat.get-color-from-palette(mat.$grey-palette, 200);
+
+  h3 {
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 600); // Themed heading for sections
+    margin-bottom: 16px; // More space below h3
+    font-size: 1.05em; // Slightly smaller than card title
+    font-weight: 500;
+  }
+}
+
+.form-array-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4px;
+
+  mat-form-field {
+    flex-grow: 1;
+  }
+  
+  button[mat-icon-button] { // Remove button
+    margin-top: 8px;
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 400);
+     &:hover {
+        color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 600);
+     }
+  }
+}
+
+.array-item-error { // For errors on FormArray items
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 500);
+    font-size: 0.75em;
+    padding-left: 2px; 
+    margin-top: -8px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+
+.add-item-button { // For "Add Requirement/Responsibility"
+  margin-top: 12px; // More space above add button
+  display: flex;
+  align-items: center;
+  // Uses primary color by default if color="primary" in HTML
+  mat-icon {
+    margin-right: 4px;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px !important;
+  border-top: 1px solid mat.get-color-from-palette(mat.$grey-palette, 200);
+
+  button[mat-raised-button] { // Accent color for evaluate button
+    padding: 10px 20px;
+    font-size: 15px;
+    min-width: 150px;
+
+    mat-icon mat-progress-spinner {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .mat-icon:not(:has(mat-progress-spinner)) {
+        margin-right: 8px;
+    }
+  }
+}
+
+.feedback-container {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.loading-container {
+   mat-progress-bar { // Use accent color for progress bar (matches button)
+      --mdc-linear-progress-active-indicator-color: #{mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 500)};
+  }
+  p {
+    margin-top: 16px;
+    font-style: italic;
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 500);
+  }
+}
+
+.error-container {
+  .error-card {
+    background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 50);
+    border: 1px solid mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 200);
+    text-align: left;
+    .mat-mdc-card-title {
+      color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 700);
+      display: flex;
+      align-items: center;
+      mat-icon {
+        margin-right: 8px;
+        color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 500);
+      }
+    }
+    mat-card-content p {
+      color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 900);
+    }
+     mat-card-actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 8px 16px !important;
+    }
+  }
+}
+
+.results-section {
+  text-align: left;
+   .mat-mdc-card-header .mat-mdc-card-title { // Style title for results card
+    font-size: 1.15em;
+    font-weight: 500;
+    // Use primary color for results title to contrast with accent button/loader
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 700); 
+    display: flex;
+    align-items: center;
+    .title-icon {
+        margin-right: 8px;
+        color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 500);
+    }
+  }
+  mat-card-subtitle {
+    font-size: 0.9em;
+    color: mat.get-color-from-palette(mat.$grey-palette, 600);
+    margin-bottom: 16px;
+    span { 
+        margin-left: 8px;
+        font-style: italic;
+    }
+  }
+  .evaluation-summary {
+      background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 50); // Light primary for summary
+      padding: 16px;
+      border-radius: 4px;
+      margin-bottom: 20px; // More space below summary
+      border: 1px solid mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 100);
+      h3 {
+          margin-top: 0;
+          color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 700);
+          font-size: 1.1em; // Slightly larger summary heading
+          font-weight: 500;
+      }
+      p {
+          line-height: 1.6;
+          color: mat.get-color-from-palette(mat.$grey-palette, 800);
+      }
+  }
+  .evaluation-data-pre {
+    background-color: mat.get-color-from-palette(mat.$grey-palette, 50);
+    border: 1px solid mat.get-color-from-palette(mat.$grey-palette, 200);
+    border-radius: 4px;
+    padding: 16px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 600px;
+    overflow-y: auto;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 0.9em;
+    color: mat.get-color-from-palette(mat.$grey-palette, 800);
+    line-height: 1.5;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+    .evaluate-role-container h1 {
+        font-size: 1.8em;
+    }
+    .form-actions button[mat-raised-button] {
+        min-width: 100%; // Full width button on mobile
+    }
+}

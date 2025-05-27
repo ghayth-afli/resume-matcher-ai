@@ -1,0 +1,274 @@
+@use '@angular/material' as mat;
+@use '../../custom-theme' as custom-theme;
+
+.matcher-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 500);
+    font-weight: 500;
+  }
+}
+
+.form-sections-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px; // Increased gap
+
+  .form-section {
+    flex: 1 1 calc(50% - 12px); // Adjust for gap
+    min-width: 320px; // Slightly larger min-width
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+mat-card {
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); // Softer shadow consistent with health-check
+
+  .mat-mdc-card-header { // Target MDC component
+    padding-bottom: 8px;
+    .mat-mdc-card-title {
+        font-size: 1.15em; // Consistent title size
+        font-weight: 500;
+    }
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.file-input-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  button[mat-stroked-button] { // Style the upload button
+     border-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 300);
+     color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 500);
+     &:hover {
+        background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 50);
+     }
+  }
+
+  .file-name {
+    font-style: italic;
+    color: mat.get-color-from-palette(mat.$grey-palette, 700);
+  }
+}
+
+.form-array-item {
+  display: flex;
+  align-items: flex-start; // Align for multiline error messages
+  gap: 8px;
+  margin-bottom: 4px; // Tighter packing
+
+  mat-form-field {
+    flex-grow: 1;
+  }
+  button[mat-icon-button] { // Remove button in form array
+    margin-top: 8px; // Align with input box
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 400);
+     &:hover {
+        color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 600);
+     }
+  }
+}
+// Error styling for form array items (if needed, not explicitly defined in HTML yet)
+.array-item-error { 
+    font-size: 0.75em;
+    padding-left: 2px; 
+    margin-top: -8px; 
+    display: block; 
+    margin-bottom: 8px; 
+}
+
+
+.add-item-button { // For "Add Requirement/Responsibility"
+  margin-top: 8px;
+  mat-icon { margin-right: 4px; }
+}
+
+
+.submit-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px; // More space above submit
+  margin-bottom: 32px;
+
+  button[mat-raised-button] {
+    padding: 12px 30px; // Larger padding
+    font-size: 1.1em; // Larger font
+    min-width: 220px;
+    // Primary color is applied automatically via color="primary" in HTML
+
+    mat-icon mat-progress-spinner {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .mat-icon:not(:has(mat-progress-spinner)) {
+        margin-right: 8px;
+    }
+  }
+}
+
+.loading-container, .error-container.results-section { // Ensure error container also uses this styling
+  text-align: center;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 4px; // Rounded corners for these states
+}
+
+.loading-container {
+  p {
+    margin-top: 16px;
+    font-style: italic;
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 500);
+  }
+}
+
+.error-card { // Specific styling for error card
+  background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 50);
+  border: 1px solid mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 200);
+  .mat-mdc-card-title {
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 700);
+    display: flex;
+    align-items: center;
+    mat-icon {
+      margin-right: 8px;
+      color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 500);
+    }
+  }
+  mat-card-content p {
+      color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 900);
+  }
+  mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 16px !important;
+  }
+}
+
+.results-section {
+  margin-top: 32px;
+  h2 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 500);
+    font-weight: 500;
+  }
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); // Slightly larger min size
+  gap: 24px; // Increased gap
+}
+
+.result-card {
+  background-color: #fff; // Ensure cards are white on light grey background
+  .mat-mdc-card-header {
+    border-bottom: 1px solid mat.get-color-from-palette(mat.$grey-palette, 200); // Separator for header
+    .mat-mdc-card-title {
+        color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 700);
+    }
+  }
+  mat-card-content {
+    h4 {
+      margin-top: 16px;
+      margin-bottom: 10px; // More space below h4
+      color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 600);
+      font-weight: 500;
+    }
+    mat-chip-listbox .mat-mdc-chip { // Target MDC chips
+      // Primary chips for matching skills
+      &.mat-mdc-chip-highlighted.mat-primary {
+         background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 500);
+         color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 'default-contrast');
+      }
+      // Accent chips for missing skills
+      &.mat-mdc-chip-highlighted.mat-accent {
+         background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 400); // A bit darker accent
+         color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 'default-contrast');
+      }
+      margin: 4px;
+    }
+     mat-list {
+        .mat-mdc-list-item .mat-icon { // Icons in lists (red flags, bonus points)
+            margin-right: 12px;
+        }
+        .mat-mdc-list-item .mat-mdc-list-item-title { // For list item text
+            font-size: 0.95em;
+        }
+     }
+    p {
+      line-height: 1.6;
+      color: mat.get-color-from-palette(mat.$grey-palette, 800);
+    }
+  }
+}
+
+.main-score-card {
+  background: linear-gradient(135deg, mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 500), mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 700));
+  color: white; // Text color for this card
+
+  .mat-mdc-card-header .mat-mdc-card-title {
+      color: white;
+  }
+  mat-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    p { color: white; strong { color: white; font-weight: 600;}}
+  }
+  .score-circle {
+    width: 130px; // Larger circle
+    height: 130px;
+    border-radius: 50%;
+    // Use accent for score circle background for contrast
+    background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 400); 
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 'default-contrast');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.8em; // Larger font
+    font-weight: bold;
+    margin-bottom: 20px; // More space
+    box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    border: 3px solid white; // White border for definition
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 992px) { // Adjusted breakpoint for better form layout earlier
+  .form-sections-container {
+    flex-direction: column;
+  }
+  .form-section {
+    flex: 1 1 100%;
+    min-width: unset; // Remove min-width when stacked
+  }
+}
+
+@media (max-width: 600px) {
+    .results-grid {
+        grid-template-columns: 1fr; // Single column on small screens
+    }
+    .matcher-container h1 {
+        font-size: 1.8em; // Adjust heading size on mobile
+    }
+    .submit-button-container button[mat-raised-button] {
+        padding: 10px 20px;
+        font-size: 1em;
+        min-width: 180px;
+    }
+}

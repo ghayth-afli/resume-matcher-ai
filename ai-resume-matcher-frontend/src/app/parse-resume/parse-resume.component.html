@@ -1,0 +1,93 @@
+<div class="parse-resume-container">
+  <h1>Parse Resume</h1>
+  <p class="sub-heading">Upload a resume file or paste its content to see the parsed output from the Tika server.</p>
+
+  <form [formGroup]="parseForm" (ngSubmit)="onSubmit()" class="parse-form">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Resume Input</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="file-input-container">
+          <button mat-stroked-button color="accent" type="button" (click)="fileInput.click()">
+            <mat-icon>attach_file</mat-icon>
+            Upload Resume File
+          </button>
+          <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept=".txt,.pdf,.docx">
+          <span *ngIf="fileName" class="file-name">{{ fileName }}</span>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width" *ngIf="!fileName">
+          <mat-label>Or paste resume text here</mat-label>
+          <textarea matInput formControlName="resume" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="7" cdkAutosizeMaxRows="20"
+            placeholder="Paste resume text (if not uploading file)"></textarea>
+          <mat-hint>If you upload a file, its content will be used and take precedence.</mat-hint>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="full-width resume-type-select">
+          <mat-label>Resume Type</mat-label>
+          <mat-select formControlName="resume_type">
+            <mat-option value="txt">Text (.txt)</mat-option>
+            <mat-option value="pdf">PDF (.pdf)</mat-option>
+            <mat-option value="docx">Word (.docx)</mat-option>
+          </mat-select>
+          <mat-error *ngIf="parseForm.get('resume_type')?.hasError('required')">
+            Resume type is required.
+          </mat-error>
+        </mat-form-field>
+
+         <div *ngIf="parseForm.get('resume')?.hasError('required') && parseForm.get('resume')?.touched && !fileName" class="custom-error">
+            Resume content is required if not uploading a file.
+          </div>
+
+      </mat-card-content>
+      <mat-card-actions class="form-actions">
+        <button mat-raised-button color="primary" type="submit" [disabled]="isLoading || parseForm.invalid">
+          <mat-icon *ngIf="!isLoading">text_snippet</mat-icon>
+          <mat-icon *ngIf="isLoading">
+            <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+          </mat-icon>
+          {{ isLoading ? 'Parsing...' : 'Parse Resume' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading && !error && !parsedResponse" class="feedback-container loading-container">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Parsing resume... Please wait.</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="feedback-container error-container">
+    <mat-card class="error-card">
+      <mat-card-title>
+        <mat-icon color="warn">error</mat-icon> Error Parsing Resume
+      </mat-card-title>
+      <mat-card-content>
+        <p>{{ error }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+         <button mat-stroked-button color="warn" (click)="onSubmit()">Retry</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Results Section -->
+  <div *ngIf="parsedResponse && !isLoading && !error" class="results-section feedback-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title><mat-icon class="title-icon">description</mat-icon>Parsed Resume Data</mat-card-title>
+        <mat-card-subtitle>
+          File: {{ parsedResponse.filename || 'N/A' }} | Type: {{ parsedResponse.resume_type || 'N/A' }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <pre class="parsed-data-pre">{{ parsedResponse.parsed_data | json }}</pre>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>

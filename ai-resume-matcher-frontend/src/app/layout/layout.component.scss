@@ -1,0 +1,90 @@
+@use '@angular/material' as mat;
+
+// Import the theme from your custom theme file to access palette colors
+// Adjust the path as necessary if your theme file is located elsewhere.
+@use '../../custom-theme' as custom-theme;
+
+.sidenav-container {
+  height: 100vh;
+  width: 100vw; // Ensure it takes full viewport width
+  overflow: hidden; // Prevent container scrollbars if content overflows
+}
+
+.sidenav {
+  width: 260px; // Slightly wider for better text fit
+  // Use theme background color for sidenav
+  background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 50); // Lighter shade of primary
+  border-right: 1px solid mat.get-color-from-palette(mat.$grey-palette, 300); // Themed border
+
+  .mat-toolbar { // Sidenav's own toolbar for title/branding
+    // background: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 100);
+    // color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 900);
+    padding-left: 24px; // Align with list item indentation
+    font-weight: 500;
+  }
+
+  .mat-nav-list .mat-mdc-list-item { // Targeting Material v15+ MDC components
+    margin: 0 8px 8px 8px; // Add horizontal margin too
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    padding-left: 16px !important; // Ensure consistent padding for items with icons
+
+    .mat-icon { // Icon styling within list items
+      margin-right: 16px; // More space between icon and text
+      color: mat.get-color-from-palette(mat.$grey-palette, 700); // Neutral icon color
+    }
+    
+    span[matListItemTitle] { // Styling for the title text
+        color: mat.get-color-from-palette(mat.$grey-palette, 800);
+        font-weight: 500;
+    }
+
+    &:hover {
+      background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 100);
+      .mat-icon, span[matListItemTitle] {
+        color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 700);
+      }
+    }
+
+    &.active-link {
+      background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 500);
+      .mat-icon, span[matListItemTitle] {
+        color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 'default-contrast'); // White or dark contrast
+        font-weight: 500;
+      }
+       &:hover {
+         background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 600);
+       }
+    }
+  }
+}
+
+.header { // Main application header toolbar
+  position: sticky;
+  top: 0;
+  z-index: 1001; // Higher than sidenav for 'over' mode
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); // Subtle shadow for depth
+
+  button[mat-icon-button] { // Menu button
+    margin-right: 8px; // Space between menu icon and title
+  }
+  span { // App title
+    font-weight: 500;
+  }
+}
+
+.content {
+  padding: 24px;
+  min-height: calc(100vh - 64px); // 64px is default toolbar height
+  overflow-y: auto; // Allow content to scroll independently
+  // background-color: #ffffff; // If body is light grey, content area can be white
+}
+
+// Responsive adjustments for content padding when sidenav is in 'side' mode
+@media (min-width: 600px) { // Breakpoint for handset, adjust as per Breakpoints.Handset
+  .mat-sidenav-opened:not(.mat-sidenav-mode-over) + .mat-sidenav-content {
+     // When sidenav is open and in 'side' mode, adjust margin of content
+     // This might not be needed if using Angular Material's built-in autosize behavior correctly
+     // margin-left: 260px; // same as .sidenav width
+  }
+}

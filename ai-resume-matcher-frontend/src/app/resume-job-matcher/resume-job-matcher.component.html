@@ -1,0 +1,246 @@
+<div class="matcher-container">
+  <h1>Resume-Job Description Matcher</h1>
+
+  <!-- Form Section -->
+  <form [formGroup]="matcherForm" (ngSubmit)="onSubmit()">
+    <div class="form-sections-container">
+      <!-- Left Section: Resume and Job Info -->
+      <div class="form-section">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Resume Details</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <!-- Resume File Input -->
+            <div class="file-input-container">
+              <button mat-stroked-button color="primary" type="button" (click)="fileInput.click()">
+                <mat-icon>attach_file</mat-icon>
+                Upload Resume
+              </button>
+              <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept=".txt,.pdf,.docx">
+              <span *ngIf="fileName" class="file-name">{{ fileName }}</span>
+              <mat-form-field appearance="outline" class="full-width" *ngIf="!fileName">
+                <mat-label>Or paste resume text here</mat-label>
+                <textarea matInput formControlName="resume" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="5" cdkAutosizeMaxRows="15"
+                  placeholder="Paste resume text (if not uploading file)"></textarea>
+                <mat-hint>If you upload a file, its content will be used.</mat-hint>
+              </mat-form-field>
+            </div>
+             <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Resume Type</mat-label>
+                <mat-select formControlName="resume_type">
+                  <mat-option value="txt">Text (.txt)</mat-option>
+                  <mat-option value="pdf">PDF (.pdf)</mat-option>
+                  <mat-option value="docx">Word (.docx)</mat-option>
+                </mat-select>
+              </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card formGroupName="job_description">
+          <mat-card-header>
+            <mat-card-title>Job Description</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Job Title</mat-label>
+              <input matInput formControlName="title" placeholder="e.g., Software Engineer">
+              <mat-error *ngIf="matcherForm.get('job_description.title')?.hasError('required')">
+                Job title is required.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Job Description</mat-label>
+              <textarea matInput formControlName="description" cdkTextareaAutosize #autosizeDesc="cdkTextareaAutosize"
+                cdkAutosizeMinRows="5" cdkAutosizeMaxRows="15" placeholder="Paste full job description"></textarea>
+              <mat-error *ngIf="matcherForm.get('job_description.description')?.hasError('required')">
+                Job description is required.
+              </mat-error>
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Right Section: Requirements, Responsibilities, Optional Info -->
+      <div class="form-section">
+        <mat-card formGroupName="job_description">
+          <mat-card-header>
+            <mat-card-title>Key Requirements</mat-card-title>
+          </mat-card-header>
+          <mat-card-content formArrayName="requirements">
+            <div *ngFor="let req of requirements.controls; let i=index" class="form-array-item">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Requirement {{i + 1}}</mat-label>
+                <input matInput [formControlName]="i">
+                <button mat-icon-button type="button" (click)="removeRequirement(i)" *ngIf="requirements.length > 1" aria-label="Remove requirement">
+                  <mat-icon>remove_circle_outline</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <button mat-stroked-button type="button" (click)="addRequirement()">
+              <mat-icon>add</mat-icon> Add Requirement
+            </button>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card formGroupName="job_description">
+          <mat-card-header>
+            <mat-card-title>Key Responsibilities</mat-card-title>
+          </mat-card-header>
+          <mat-card-content formArrayName="responsibilities">
+            <div *ngFor="let resp of responsibilities.controls; let i=index" class="form-array-item">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Responsibility {{i + 1}}</mat-label>
+                <input matInput [formControlName]="i">
+                <button mat-icon-button type="button" (click)="removeResponsibility(i)" *ngIf="responsibilities.length > 1" aria-label="Remove responsibility">
+                  <mat-icon>remove_circle_outline</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+            <button mat-stroked-button type="button" (click)="addResponsibility()">
+              <mat-icon>add</mat-icon> Add Responsibility
+            </button>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Optional Information</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Job ID (Optional)</mat-label>
+              <input matInput formControlName="job_id">
+            </mat-form-field>
+            <div formGroupName="company_info">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Company Name (Optional)</mat-label>
+                <input matInput formControlName="name">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Industry (Optional)</mat-label>
+                <input matInput formControlName="industry">
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="submit-button-container">
+      <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+        <mat-icon *ngIf="!isLoading">send</mat-icon>
+        <mat-icon *ngIf="isLoading">
+          <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+        </mat-icon>
+        {{ isLoading ? 'Matching...' : 'Match Resume' }}
+      </button>
+    </div>
+  </form>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading && !error && !matchResponse" class="loading-container results-section">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <p>Analyzing and matching... Please wait.</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-container results-section">
+    <mat-card class="error-card">
+      <mat-card-title>
+        <mat-icon color="warn">error</mat-icon> Error
+      </mat-card-title>
+      <mat-card-content>
+        <p>{{ error }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+         <button mat-stroked-button color="warn" (click)="onSubmit()">Retry</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Results Section -->
+  <div *ngIf="matchResponse && !isLoading && !error" class="results-section">
+    <h2>Match Results</h2>
+    <div class="results-grid">
+      <mat-card class="result-card main-score-card">
+        <mat-card-header>
+          <mat-card-title><mat-icon class="title-icon">assessment</mat-icon>Overall Match</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="score-circle">
+            {{ (matchResponse.overall_score * 100).toFixed(0) }}%
+          </div>
+          <p><strong>Interpretation:</strong> {{ matchResponse.overall_interpretation }}</p>
+          <p><strong>Role Type:</strong> {{ matchResponse.role_type }}</p>
+          <p><strong>Confidence Score:</strong> {{ (matchResponse.confidence_score * 100).toFixed(0) }}%</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="result-card">
+        <mat-card-header>
+          <mat-card-title><mat-icon color="primary" class="title-icon">checklist</mat-icon>Skills Analysis</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p><strong>Analysis:</strong> {{ matchResponse.skills_match.skills_analysis }}</p>
+          <h4>Matching Skills:</h4>
+          <mat-chip-listbox aria-label="Matching skills">
+            <mat-chip *ngFor="let skill of matchResponse.skills_match.matching_skills" color="primary" selected class="mat-mdc-chip-highlighted mat-primary">
+              {{skill}}
+            </mat-chip>
+            <span *ngIf="!matchResponse.skills_match.matching_skills?.length">None identified.</span>
+          </mat-chip-listbox>
+          <h4>Missing Skills:</h4>
+          <mat-chip-listbox aria-label="Missing skills">
+            <mat-chip *ngFor="let skill of matchResponse.skills_match.missing_skills" color="accent" selected class="mat-mdc-chip-highlighted mat-accent">
+              {{skill}}
+            </mat-chip>
+            <span *ngIf="!matchResponse.skills_match.missing_skills?.length">None identified.</span>
+          </mat-chip-listbox>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="result-card">
+        <mat-card-header>
+          <mat-card-title><mat-icon color="primary" class="title-icon">insights</mat-icon>Key Insights</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ matchResponse.insights }}</p>
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card class="result-card">
+        <mat-card-header>
+          <mat-card-title><mat-icon color="warn" class="title-icon">flag</mat-icon>Red Flags</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list *ngIf="matchResponse.red_flags?.length; else noRedFlags">
+            <mat-list-item *ngFor="let flag of matchResponse.red_flags">
+              <mat-icon matListItemIcon color="warn">flag</mat-icon>
+              <span matListItemTitle>{{ flag }}</span>
+            </mat-list-item>
+          </mat-list>
+          <ng-template #noRedFlags><p>No red flags identified.</p></ng-template>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="result-card">
+        <mat-card-header>
+          <mat-card-title><mat-icon color="accent" class="title-icon">star_outline</mat-icon>Bonus Points</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list *ngIf="matchResponse.bonus_points?.length; else noBonusPoints">
+            <mat-list-item *ngFor="let bonus of matchResponse.bonus_points">
+              <mat-icon matListItemIcon color="accent">star_outline</mat-icon>
+               <span matListItemTitle>{{ bonus }}</span>
+            </mat-list-item>
+          </mat-list>
+          <ng-template #noBonusPoints><p>No specific bonus points identified.</p></ng-template>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

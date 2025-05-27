@@ -1,0 +1,41 @@
+<div class="health-check-container">
+  <mat-card *ngIf="!isLoading && (healthStatus$ | async) as status; else loadingOrError">
+    <mat-card-header>
+      <mat-card-title [ngClass]="{'status-up': status.status === 'UP', 'status-down': status.status !== 'UP'}">
+        <mat-icon>
+          {{ status.status === 'UP' ? 'check_circle' : 'warning' }}
+        </mat-icon>
+        Health Status: {{ status.status }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p><strong>Service:</strong> {{ status.service }}</p>
+      <p><strong>Version:</strong> {{ status.version }}</p>
+      <!-- Add any other fields you want to display -->
+    </mat-card-content>
+  </mat-card>
+
+  <ng-template #loadingOrError>
+    <div *ngIf="isLoading; else errorState" class="loading-container">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <p>Loading health status...</p>
+    </div>
+
+    <ng-template #errorState>
+      <mat-card class="error-card" *ngIf="error">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon color="warn">error</mat-icon>
+            Error Loading Health Status
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ error }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="onRetry()">Retry</button>
+        </mat-card-actions>
+      </mat-card>
+    </ng-template>
+  </ng-template>
+</div>

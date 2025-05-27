@@ -1,0 +1,106 @@
+@use '@angular/material' as mat;
+@use '../../custom-theme' as custom-theme; // Access to theme variables
+
+.health-check-container {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px; // Add gap between elements if multiple cards/sections appear
+}
+
+mat-card {
+  max-width: 600px;
+  width: 100%; // Ensure card takes available width up to max-width
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05); // Softer shadow
+
+  mat-card-header {
+    padding-bottom: 8px; // Space below title
+    .mat-mdc-card-title { // Target MDC component title
+        display: flex;
+        align-items: center;
+        font-size: 1.25em; // Slightly larger title
+        font-weight: 500;
+         mat-icon {
+            margin-right: 10px; // More space for icon
+            font-size: 1.5em; // Larger icon in title
+        }
+    }
+  }
+  
+  mat-card-content {
+    p {
+      font-size: 1em;
+      line-height: 1.6;
+      margin-bottom: 8px;
+      strong {
+        font-weight: 500; // Make strong elements stand out a bit more
+        color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 700);
+      }
+    }
+  }
+}
+
+.status-up {
+  // Use primary color for "UP" status icon
+  mat-icon {
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-primary, 500);
+  }
+}
+
+.status-down {
+  // Use warn color for "DOWN" or other non-UP statuses
+  mat-icon {
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 500);
+  }
+}
+
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px; // More padding
+  width: 100%;
+  max-width: 600px;
+  background-color: transparent; // No card-like background for loading bar itself
+
+  mat-progress-bar {
+    width: 100%; // Progress bar spans the container width
+    margin-bottom: 20px; // Space below progress bar
+  }
+
+  p {
+    margin-top: 0; // Remove top margin as progress bar has bottom margin
+    font-style: italic;
+    font-size: 1.1em; // Slightly larger text
+    color: mat.get-color-from-palette(mat.$grey-palette, 700);
+  }
+}
+
+.error-card {
+  // Use theme's warn palette for background/border
+  background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 50); // Lighter warn color
+  border: 1px solid mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 200);
+
+  .mat-mdc-card-title { // Target MDC component title
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 700); // Darker warn for title
+    mat-icon {
+      color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 500); // Standard warn for icon
+    }
+  }
+  
+  mat-card-content p {
+      color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 900); // Dark text for readability
+  }
+
+  mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 16px !important; 
+    button[mat-raised-button] { // Style retry button
+        // It will pick up warn color by default if color="warn" is set in HTML
+    }
+  }
+}

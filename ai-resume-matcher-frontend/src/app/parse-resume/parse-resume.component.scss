@@ -1,0 +1,187 @@
+@use '@angular/material' as mat;
+@use '../../custom-theme' as custom-theme;
+
+.parse-resume-container {
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+
+  h1 {
+    text-align: center;
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 500); // Use accent for this tool's title
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .sub-heading {
+    text-align: center;
+    color: mat.get-color-from-palette(mat.$grey-palette, 700);
+    margin-bottom: 24px;
+    font-size: 1.1em;
+  }
+}
+
+.parse-form {
+  mat-card {
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    .mat-mdc-card-header .mat-mdc-card-title {
+        font-size: 1.15em;
+        font-weight: 500;
+    }
+  }
+  mat-card-header {
+    padding-bottom: 16px;
+  }
+  mat-card-content {
+    padding-top: 16px;
+  }
+}
+
+.file-input-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  button[mat-stroked-button] { // Accent color for upload button
+     border-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 300);
+     color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 500);
+     &:hover {
+        background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 50);
+     }
+  }
+
+  .file-name {
+    font-style: italic;
+    color: mat.get-color-from-palette(mat.$grey-palette, 700);
+    font-weight: 500;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.resume-type-select {
+  margin-top: 16px;
+}
+
+.custom-error { // For manual error message below textarea
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 500);
+    font-size: 0.75em;
+    margin-top: -12px;
+    padding-left: 2px;
+    margin-bottom: 10px;
+}
+
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px !important;
+  border-top: 1px solid mat.get-color-from-palette(mat.$grey-palette, 200);
+
+  button[mat-raised-button] { // Primary color for submit action
+    padding: 10px 20px;
+    font-size: 15px;
+    min-width: 150px;
+
+    mat-icon mat-progress-spinner {
+      display: inline-block;
+      vertical-align: middle;
+    }
+     .mat-icon:not(:has(mat-progress-spinner)) {
+        margin-right: 8px;
+    }
+  }
+}
+
+.feedback-container {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.loading-container {
+  mat-progress-bar { // Use accent color for progress bar here
+      --mdc-linear-progress-active-indicator-color: #{mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 500)};
+  }
+  p {
+    margin-top: 16px;
+    font-style: italic;
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 500);
+  }
+}
+
+.error-container {
+  .error-card {
+    background-color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 50);
+    border: 1px solid mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 200);
+    text-align: left;
+    .mat-mdc-card-title {
+      color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 700);
+      display: flex;
+      align-items: center;
+      mat-icon {
+        margin-right: 8px;
+        color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 500);
+      }
+    }
+    mat-card-content p {
+      color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-warn, 900);
+    }
+    mat-card-actions {
+      display: flex;
+      justify-content: flex-end;
+      padding: 8px 16px !important;
+    }
+  }
+}
+
+.results-section {
+  text-align: left;
+  .mat-mdc-card-header .mat-mdc-card-title { // Style title for results card
+    font-size: 1.15em;
+    font-weight: 500;
+    color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 700); // Darker accent
+    display: flex;
+    align-items: center;
+    .title-icon {
+        margin-right: 8px;
+        color: mat.get-color-from-palette(custom-theme.$ai-resume-matcher-accent, 500);
+    }
+  }
+  mat-card-subtitle {
+    font-size: 0.9em;
+    color: mat.get-color-from-palette(mat.$grey-palette, 600);
+    margin-bottom: 16px;
+  }
+  .parsed-data-pre {
+    background-color: mat.get-color-from-palette(mat.$grey-palette, 50); // Very light grey
+    border: 1px solid mat.get-color-from-palette(mat.$grey-palette, 200);
+    border-radius: 4px;
+    padding: 16px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 600px;
+    overflow-y: auto;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; // Monospace font
+    font-size: 0.9em; // Slightly larger for readability
+    color: mat.get-color-from-palette(mat.$grey-palette, 800);
+    line-height: 1.5;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+  .file-input-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px; // Slightly more gap
+  }
+  .parse-resume-container h1 {
+      font-size: 1.8em;
+  }
+  .form-actions button[mat-raised-button] {
+      min-width: 100%; // Full width button on mobile
+  }
+}

@@ -1,0 +1,72 @@
+@use '@angular/material' as mat;
+
+// Include the common styles for Angular Material. We need this here once per application.
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes.
+// (https://m2.material.io/design/color/the-color-system.html#tools-for-picking-colors)
+$ai-resume-matcher-primary: mat.define-palette(mat.$indigo-palette, 500, 100, 700);
+$ai-resume-matcher-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$ai-resume-matcher-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems (color, typography, density).
+$ai-resume-matcher-theme: mat.define-light-theme((
+  color: (
+    primary: $ai-resume-matcher-primary,
+    accent: $ai-resume-matcher-accent,
+    warn: $ai-resume-matcher-warn,
+  ),
+  // typography: mat.define-typography-config(), // We can customize this later if needed
+  // density: 0, // Default density
+));
+
+// Apply the theme to your components.
+@include mat.all-component-themes($ai-resume-matcher-theme);
+
+// --- Custom Scrollbar Styling (Webkit only) ---
+// For a more subtle scrollbar, if desired
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+// --- Global HTML and Body styles ---
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', "Helvetica Neue", sans-serif; // Default Material font
+  background-color: #f4f6f8; // A very light grey for the general background
+  color: #333; // Default text color
+}
+
+// --- Typography Enhancements (Optional) ---
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400; // Material Design often uses lighter font weights for headers
+}
+
+// --- General Link Styling ---
+a {
+  color: mat.get-color-from-palette($ai-resume-matcher-primary, 500);
+  text-decoration: none;
+  &:hover {
+    color: mat.get-color-from-palette($ai-resume-matcher-primary, 700);
+    text-decoration: underline;
+  }
+}

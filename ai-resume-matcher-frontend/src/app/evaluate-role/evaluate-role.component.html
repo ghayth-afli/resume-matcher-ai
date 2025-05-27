@@ -1,0 +1,129 @@
+<div class="evaluate-role-container">
+  <h1>Evaluate Job Description</h1>
+  <p class="sub-heading">Enter the details of a job description to get an AI-powered evaluation of its clarity, completeness, and potential issues.</p>
+
+  <form [formGroup]="evaluateForm" (ngSubmit)="onSubmit()" class="evaluate-form">
+    <mat-card formGroupName="job_description">
+      <mat-card-header>
+        <mat-card-title>Job Description Details</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Job Title -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Job Title</mat-label>
+          <input matInput formControlName="title" placeholder="e.g., Senior Software Engineer">
+          <mat-error *ngIf="jobDescriptionForm.get('title')?.hasError('required') && jobDescriptionForm.get('title')?.touched">
+            Job title is required.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Job Description Text -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Full Job Description</mat-label>
+          <textarea matInput formControlName="description" cdkTextareaAutosize #autosizeDesc="cdkTextareaAutosize"
+            cdkAutosizeMinRows="5" cdkAutosizeMaxRows="15" placeholder="Paste the entire job description here..."></textarea>
+          <mat-error *ngIf="jobDescriptionForm.get('description')?.hasError('required') && jobDescriptionForm.get('description')?.touched">
+            Full job description is required.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Requirements -->
+        <div class="form-array-container">
+          <h3>Key Requirements</h3>
+          <div formArrayName="requirements">
+            <div *ngFor="let req of requirements.controls; let i=index" class="form-array-item">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Requirement {{i + 1}}</mat-label>
+                <input matInput [formControlName]="i">
+                <button mat-icon-button type="button" (click)="removeRequirement(i)" *ngIf="requirements.length > 1" aria-label="Remove requirement" color="warn">
+                  <mat-icon>remove_circle_outline</mat-icon>
+                </button>
+              </mat-form-field>
+               <mat-error *ngIf="requirements.controls[i]?.hasError('required') && requirements.controls[i]?.touched" class="array-item-error">
+                  Requirement cannot be empty.
+                </mat-error>
+            </div>
+            <button mat-stroked-button type="button" (click)="addRequirement()" color="primary" class="add-item-button">
+              <mat-icon>add</mat-icon> Add Requirement
+            </button>
+          </div>
+        </div>
+
+        <!-- Responsibilities -->
+        <div class="form-array-container">
+          <h3>Key Responsibilities</h3>
+          <div formArrayName="responsibilities">
+            <div *ngFor="let resp of responsibilities.controls; let i=index" class="form-array-item">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Responsibility {{i + 1}}</mat-label>
+                <input matInput [formControlName]="i">
+                <button mat-icon-button type="button" (click)="removeResponsibility(i)" *ngIf="responsibilities.length > 1" aria-label="Remove responsibility" color="warn">
+                  <mat-icon>remove_circle_outline</mat-icon>
+                </button>
+              </mat-form-field>
+              <mat-error *ngIf="responsibilities.controls[i]?.hasError('required') && responsibilities.controls[i]?.touched" class="array-item-error">
+                  Responsibility cannot be empty.
+                </mat-error>
+            </div>
+            <button mat-stroked-button type="button" (click)="addResponsibility()" color="primary" class="add-item-button">
+              <mat-icon>add</mat-icon> Add Responsibility
+            </button>
+          </div>
+        </div>
+
+      </mat-card-content>
+      <mat-card-actions class="form-actions">
+        <button mat-raised-button color="accent" type="submit" [disabled]="isLoading || evaluateForm.invalid">
+          <mat-icon *ngIf="!isLoading">rate_review</mat-icon>
+          <mat-icon *ngIf="isLoading">
+            <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
+          </mat-icon>
+          {{ isLoading ? 'Evaluating...' : 'Evaluate Role' }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading && !error && !evaluationResponse" class="feedback-container loading-container">
+    <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
+    <p>Evaluating job description... This may take a moment.</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="feedback-container error-container">
+    <mat-card class="error-card">
+      <mat-card-title>
+        <mat-icon color="warn">error</mat-icon> Error Evaluating Role
+      </mat-card-title>
+      <mat-card-content>
+        <p>{{ error }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+         <button mat-stroked-button color="warn" (click)="onSubmit()">Retry</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Results Section -->
+  <div *ngIf="evaluationResponse && !isLoading && !error" class="results-section feedback-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title><mat-icon class="title-icon">fact_check</mat-icon>Evaluation Results</mat-card-title>
+        <mat-card-subtitle>
+          For Job Title: {{ evaluationResponse.job_title || 'N/A' }}
+          <span *ngIf="evaluationResponse.evaluation_id"> | Evaluation ID: {{ evaluationResponse.evaluation_id }}</span>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="evaluationResponse.summary" class="evaluation-summary">
+          <h3>Summary:</h3>
+          <p>{{ evaluationResponse.summary }}</p>
+        </div>
+        <h3>Detailed Evaluation:</h3>
+        <pre class="evaluation-data-pre">{{ evaluationResponse.evaluation_results | json }}</pre>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>
